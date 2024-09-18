@@ -3,19 +3,31 @@ import pytest
 from seconds import solution_2
 
 
-def test_simple():
-    assert solution_2("01:00:01") == 3601
+@pytest.mark.parametrize(
+    "time, expected",
+    [
+        ("01:00:01", 3601),
+        ("00:00:00", 0),
+        ("23:59:59", 86399)
+    ]
+)
+def test_simple(time, expected):
+    assert solution_2(time) == expected
 
 
-def test_zero():
-    assert solution_2("00:00:00") == 0
-
-
-def test_maximum():
-    assert solution_2("23:59:59") == 86399
-
-
-def test_error():
+@pytest.mark.parametrize(
+    "time",
+    [
+        "",
+        "smth",
+        "24:01:01",
+        "01:01:01:08",
+        "01:01:01  Second",
+        "01 :01 :01 :01",
+        "01:01:01:05",
+    ],
+)
+def test_error(time):
     with (pytest.raises(ValueError)):
-        assert solution_2("24:00:01")
+        assert solution_2(time)
 
